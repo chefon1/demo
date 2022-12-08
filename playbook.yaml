@@ -1,0 +1,30 @@
+---
+  - name: Java App Deployment
+    connection: local
+    hosts: master
+    tasks:
+
+    - name: build java code
+      shell:
+         " cd demo-java && mvn package "
+      register: mvn
+
+    - name: build docker image
+      shell:
+         "cd demo-java && docker build -t airflowtestnew/sample-java-app . "
+      register: dockerbuild
+
+    - name: push docker image
+      shell:
+         " docker push docker.io/airflowtestnew/sample-java-app:latest "
+      register: dockerpush
+
+    - name: create dockerhub registry secret
+      shell:
+         " kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=airflowtestnew --docker-password=Temp@12345 --docker-email=nikpunjabi265@gmail.com "
+      register: k8createsecret
+      
+    - name: run k8s deployment
+      shell:
+         " kubectl apply -f deployment.yaml "
+      register: k8sdeploy

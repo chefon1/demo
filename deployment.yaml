@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-deployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: java-deployment
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: java-deployment
+    spec:
+      containers:
+      - image: docker.io/airflowtestnew/sample-java-app:latest
+        imagePullPolicy: Always
+        name: java-app
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: regcred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-app-svc
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: java-deployment
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-java-app
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/healthcheck-path: /demo
+    alb.ingress.kubernetes.io/success-codes: 200-400
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: java-app-svc
+              port:
+                number: 80
+

@@ -21,7 +21,7 @@
 
     - name: create dockerhub registry secret
       shell:
-         " kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=airflowtestnew --docker-password=Temp@12345 --docker-email=nikpunjabi265@gmail.com "
+         " kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=chefon1 --docker-password=Descartes@1 --docker-email=chefon85@gmail.com "
       register: k8createsecret
       
     - name: run k8s deployment

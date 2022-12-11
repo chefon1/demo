@@ -16,7 +16,7 @@
 
     - name: push docker image
       shell:
-         " docker push docker.io/airflowtestnew/sample-java-app:latest "
+         " docker push chefon1/demo:latest "
       register: dockerpush
 
     - name: create dockerhub registry secret

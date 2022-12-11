@@ -11,7 +11,7 @@
 
     - name: build docker image
       shell:
-         "cd demo-java && docker build -t airflowtestnew/sample-java-app . "
+         "cd demo-java && docker build -t chefon1/demo . "
       register: dockerbuild
 
     - name: push docker image
